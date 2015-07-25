@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.example.xtiti.model.Hamaca" table="hamaca">
+		<id name="id" column="id">
+			<generator class="native"/>
+		</id>
+		<property name="id_empresa" column="id_empresa"/>
+		<property name="estado" column="estado"/>
+		<property name="latitud" column="latitud"/>
+		<property name="longitud" column="longitud"/>
+	</class>
+	<class name="com.example.xtiti.model.Usuario" table="usuario">
+		<id name="id" column="id">
+			<generator class="native"/>
+		</id>
+		<property name="nombre" column="nombre"/>
+		<property name="pass" column="pass"/>
+		<property name="id_empresa" column="empresa"/>
+		<property name="rol" column="rol"/>
+		<property name="estado" column="estado"/>
+	</class>
+	<class name="com.example.xtiti.model.Empresa" table="empresa">
+		<id name="id" column="id">
+			<generator class="native"/>
+		</id>
+		<property name="nombre" column="nombre"/>
+		<property name="latitud" column="latitud"/>
+		<property name="longitud" column="longitud"/>
+		<property name="distancia" column="distancia"/>
+	</class>
+	<class name="com.example.xtiti.model.Alquiler" table="alquiler">
+		<id name="id" column="id">
+			<generator class="native"/>
+		</id>
+		<property name="id_usuario" column="id_usuario" />
+		<property name="id_hamaca" column="id_hamaca" />
+		<property name="hora_inicio" column="hora_inicio" />
+		<property name="hora_fin" column="hora_fin" />
+	</class>
+</hibernate-mapping>
