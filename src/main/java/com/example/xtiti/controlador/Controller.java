@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,6 +18,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.example.xtiti.dao.HamacaDAO;
 import com.example.xtiti.dao.LoginDAO;
 import com.example.xtiti.model.Alquiler;
+import com.example.xtiti.model.CargaMinima;
 import com.example.xtiti.model.Empresa;
 import com.example.xtiti.model.Hamaca;
 import com.example.xtiti.model.Usuario;
@@ -27,11 +29,12 @@ public class Controller {
 	@POST
 	@Path("/login")
 	@Produces({"application/json;qs=1", "application/xml;qs=.5"})
-	public WrapperComprobacionLogin intentoLogin(Usuario usuario){
-		return new WrapperComprobacionLogin(new LoginDAO().intentoLogin(usuario.getNombre(), usuario.getPass()));
+	public CargaMinima intentoLogin(Usuario usuario){
+		return new LoginDAO().intentoLogin(usuario.getNombre(), usuario.getPass());
 	}
 	
 	@GET
+	@RolesAllowed("user")
 	@Path("/listahamacas")
 	@Produces({"application/json;qs=1", "application/xml;qs=.5"})
 	public List<Hamaca> getListaHamacas(){
@@ -63,40 +66,13 @@ public class Controller {
 	@POST
 	@Path("/alquilerhamaca")
 	@Produces({"application/json;qs=1", "application/json;qs=.5"})
-	public Alquiler alquilarHamaca(JSONObject jsonObject){
+	public Alquiler alquilarHamaca(Alquiler alquiler){
 		System.out.println("I'm in");
-		return new HamacaDAO().alquilarHamaca(jsonObject);
+		return new HamacaDAO().alquilarHamaca(alquiler);
 	}
-	//CLASES WRAPPER PARA MAPEAR
 	
-	@XmlRootElement(name = "comprobacionlogin")
-	private class WrapperComprobacionLogin{
-		@XmlElement
-		private boolean comprobacion;
-		@XmlElement
-		private int idEmpresa;
-		@XmlElement
-		private double latitudEmpresa;
-		@XmlElement
-		private double longitudEmpresa;
-		@XmlElement 
-		private double distancia;
-		
-		public WrapperComprobacionLogin(Empresa empresa){
-			
-			if(empresa != null){
-				this.comprobacion = true;
-				
-				idEmpresa = empresa.getId();
-				latitudEmpresa = empresa.getLatitud();
-				longitudEmpresa = empresa.getLongitud();
-				distancia = empresa.getDistancia();
-			}
-			else{
-				this.comprobacion = false;
-			}
-		}
-	}
+	
+	//===============CLASES WRAPPER PARA MAPEAR================//
 	
 	@XmlRootElement(name = "horaservidor")
 	private class WrapperDate{

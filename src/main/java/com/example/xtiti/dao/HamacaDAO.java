@@ -17,20 +17,35 @@ import com.example.xtiti.utils.HibernateUtil;
 
 public class HamacaDAO {
 	
-	public Alquiler alquilarHamaca(JSONObject jsonObject){
+	public Alquiler alquilarHamaca(Alquiler alquiler){
 		
-		Alquiler alquiler = null;
-		/*alquiler.setHora_inicio(new Date());
-		alquiler.setId_hamaca(hamaca.getId());
-		alquiler.setId_usuario(usuario.getId());
+		Session session = null;
+		Hamaca hamaca = null;
+		int idAlquiler;
 		
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		Transaction transaction = session.getTransaction();
-		session.save(alquiler);
+		alquiler.setHora_inicio(new Date());
 		
-		transaction.commit();
+		try{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			Transaction transaction = session.getTransaction();
+			
+			hamaca = (Hamaca) session.createQuery("FROM Hamaca WHERE id=:id").setInteger("id", alquiler.getId_hamaca()).list().get(0);
+			hamaca.setEstado("OCUPADA");
+			
+			session.update(hamaca);
+			
+			session.save(alquiler);
+			session.flush();
+			
+			idAlquiler = ((BigInteger) session.createSQLQuery("SELECT LAST_INSERT_ID()").uniqueResult()).intValue();
+			alquiler = (Alquiler) session.createQuery("FROM Alquiler WHERE id=:id").setInteger("id", idAlquiler).list().get(0);
+			
+			transaction.commit();
+		}
+		finally{
 		
-		session.close();*/
+			session.close();
+		}
 		
 		return alquiler;
 	}
